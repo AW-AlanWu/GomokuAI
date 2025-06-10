@@ -1,0 +1,34 @@
+# .clang-format
+# Based on Google style for C++20
+BasedOnStyle: Google
+Language: Cpp
+IndentWidth: 4
+TabWidth: 4
+UseTab: Never
+ColumnLimit: 100
+MaxEmptyLinesToKeep: 3
+AccessModifierOffset: -4
+IndentCaseLabels: false
+
+# Pointer alignment
+DerivePointerAlignment: false
+PointerAlignment: Right
+
+# Braces and spacing
+BreakBeforeBraces: Attach
+SpaceBeforeParens: ControlStatements
+SpacesInParentheses: false
+
+# Include sorting
+IncludeBlocks: Preserve
+SortIncludes: true
+IncludeCategories:
+  - Regex: '^<.*\.h>'
+    Priority: 1
+  - Regex: '^<'
+    Priority: 2
+  - Regex: '^"'
+    Priority: 3
+
+# Allow short functions on a single line
+AllowShortFunctionsOnASingleLine: Inline

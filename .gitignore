@@ -1,0 +1,8 @@
+# vscode C/C++ plugin generated files
+.vscode
+
+bin
+build
+
+.cache
+compile_commands.json
