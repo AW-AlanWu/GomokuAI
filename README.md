@@ -15,8 +15,10 @@ C++20 實作，支援人類玩家與簡易 AI 對弈。
 ```bash
 .
 ├── gen_compile_commands.sh   # 產生 compile_commands.json 的腳本
-├── include/                  # 標頭檔
-├── src/                      # 程式實作
+├── core/include/            # 核心模組標頭
+├── ui/include/              # UI 標頭
+├── players/include/         # 玩家相關標頭
+├── src/                     # 程式實作
 ├── tests/                    # 測試程式
 ├── Makefile
 ├── README.md
@@ -25,7 +27,8 @@ C++20 實作，支援人類玩家與簡易 AI 對弈。
 
 ### 重要檔案
 
-- `include/` 與 `src/`：遊戲各模組的標頭與實作檔案。
+- `core/include/`、`ui/include/`、`players/include/`：模組標頭檔。
+- `src/`：程式實作。
 - `Board.hpp`：定義棋盤大小與勝負檢查函式。
 - `Game.hpp`：組合 `Terminal`、`Renderer` 等元件的遊戲主體。
 - `Terminal.hpp`：處理鍵盤輸入與 ANSI 控制序列。
