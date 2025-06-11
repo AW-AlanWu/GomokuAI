@@ -1,6 +1,5 @@
 #include "TerminalUI.hpp"
 #include <unistd.h>
-#include <iostream>
 #include <string>
 
 void TerminalUI::drawBoard(const Board & /*board*/) {
@@ -11,7 +10,7 @@ void TerminalUI::showResult(int8_t winner) {
     term_.moveCursor(Board::N + 6, 1);
     term_.clearLine();
     if (winner == 0)
-        std::cout << "Draw!\n";
+        term_.writeLine("Draw!");
     else
-        std::cout << "Player " << (winner == 1 ? "●" : "○") << " wins!\n";
+        term_.writeLine(std::string("Player ") + (winner == 1 ? "●" : "○") + " wins!");
 }
