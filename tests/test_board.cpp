@@ -55,6 +55,34 @@ static void overwriteCell() {
     assert(b.isFull());
 }
 
+static void removeStone() {
+    Board b;
+    b.placeStone(0, 0, 1);
+    b.removeStone(0, 0);
+    for (size_t r = 0; r < Board::N; ++r)
+        for (size_t c = 0; c < Board::N; ++c)
+            if (!(r == 0 && c == 0)) b.placeStone(r, c, 1);
+    assert(!b.isFull());
+    assert(b.isEmpty(0, 0));
+    assert(b.at(0, 0) == 0);
+}
+
+static void resetBoard() {
+    Board b;
+    b.placeStone(0, 0, 1);
+    b.placeStone(1, 1, -1);
+    b.reset();
+    assert(b.isEmpty(0, 0));
+    assert(b.isEmpty(1, 1));
+    assert(!b.isFull());
+}
+
+static void boundsCheck() {
+    Board b;
+    assert(b.at(Board::N, Board::N) == 0);
+    assert(!b.isEmpty(Board::N, Board::N));
+}
+
 int main() {
     horizontalWin();
     verticalWin();
@@ -63,6 +91,9 @@ int main() {
     noWin();
     fullBoard();
     overwriteCell();
+    removeStone();
+    resetBoard();
+    boundsCheck();
     std::cout << "board tests passed\n";
     return 0;
 }
