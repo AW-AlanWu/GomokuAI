@@ -3,7 +3,6 @@
 #include <chrono>
 #include <functional>
 #include <random>
-#include <unordered_map>
 #include <vector>
 
 // Direction vectors for checking lines (dx, dy)
@@ -14,7 +13,11 @@ static constexpr int DIR[4][2] = {
     {1, -1},  // up-right diagonal
 };
 
-static bool makesFive(const Board &board, int r, int c, int8_t who) {
+NegamaxStrategy::NegamaxStrategy() {
+    tt_.reserve(100000);
+}
+
+bool NegamaxStrategy::makesFive(const Board &board, int r, int c, int8_t who) const {
     for (auto &d : DIR) {
         int cnt = 1;
         for (int step = 1; step < 5; ++step) {
@@ -40,7 +43,7 @@ static bool makesFive(const Board &board, int r, int c, int8_t who) {
     return false;
 }
 
-static bool hasNeighbor(const Board &board, int r, int c) {
+bool NegamaxStrategy::hasNeighbor(const Board &board, int r, int c) const {
     for (int dr = -1; dr <= 1; ++dr) {
         for (int dc = -1; dc <= 1; ++dc) {
             if (dr == 0 && dc == 0) continue;
@@ -81,13 +84,7 @@ std::pair<int,int> NegamaxStrategy::computeMove(Board &board, int8_t player) {
         zobristInitialized = true;
     }
 
-    struct TTEntry {
-        int depth;
-        int value;
-        uint8_t flag;
-    };
-    static std::unordered_map<uint64_t, TTEntry> trans;
-    trans.clear();
+    tt_.clear();
 
     auto evaluateBoard = [&](const Board &b) {
         int score = 0;
@@ -105,8 +102,8 @@ std::pair<int,int> NegamaxStrategy::computeMove(Board &board, int8_t player) {
 
     std::function<int(const Board&,int,int,int,int8_t,uint64_t)> negamax =
         [&](const Board &b, int depth, int alpha, int beta, int8_t curr, uint64_t hash) -> int {
-        auto it = trans.find(hash);
-        if (it != trans.end()) {
+        auto it = tt_.find(hash);
+        if (it != tt_.end()) {
             const TTEntry &e = it->second;
             if (e.depth >= depth) {
                 if (e.flag == 0) return e.value;
@@ -156,7 +153,7 @@ std::pair<int,int> NegamaxStrategy::computeMove(Board &board, int8_t player) {
             uint64_t nhash = hash ^ zobrist[r][c][(curr==1?0:1)];
             if (nb.checkWin() == curr) {
                 int winVal = 1000000 - 10*depth;
-                trans[hash] = {depth, winVal, 2};
+                tt_[hash] = {depth, winVal, 2};
                 return winVal;
             }
             int val = -negamax(nb, depth-1, -beta, -alpha, (int8_t)-curr, nhash);
@@ -168,7 +165,7 @@ std::pair<int,int> NegamaxStrategy::computeMove(Board &board, int8_t player) {
         if (maxVal <= origAlpha) e.flag = 1;
         else if (maxVal >= beta) e.flag = 2;
         else e.flag = 0;
-        trans[hash] = e;
+        tt_[hash] = e;
         return maxVal;
     };
 
