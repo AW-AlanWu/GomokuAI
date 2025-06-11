@@ -17,6 +17,7 @@ public:
     bool isFull() const;
     int8_t at(size_t r, size_t c) const;
     void placeStone(size_t r, size_t c, int8_t player);
+    void removeStone(size_t r, size_t c);
     int8_t checkWin() const;
 
 private:

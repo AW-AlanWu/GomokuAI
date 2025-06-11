@@ -55,6 +55,14 @@ bool NegamaxStrategy::hasNeighbor(const Board &board, int r, int c) const {
     return false;
 }
 
+void NegamaxStrategy::applyMove(Board &board, std::pair<int, int> pos, int8_t player) {
+    board.placeStone(pos.first, pos.second, player);
+}
+
+void NegamaxStrategy::undoMove(Board &board, std::pair<int, int> pos) {
+    board.removeStone(pos.first, pos.second);
+}
+
 std::pair<int,int> NegamaxStrategy::computeMove(Board &board, int8_t player) {
     int8_t opponent = (player == 1 ? -1 : 1);
     for (int r = 0; r < Board::N; ++r) {
@@ -100,8 +108,8 @@ std::pair<int,int> NegamaxStrategy::computeMove(Board &board, int8_t player) {
         return score;
     };
 
-    std::function<int(const Board&,int,int,int,int8_t,uint64_t)> negamax =
-        [&](const Board &b, int depth, int alpha, int beta, int8_t curr, uint64_t hash) -> int {
+    std::function<int(Board&,int,int,int,int8_t,uint64_t)> negamax =
+        [&](Board &b, int depth, int alpha, int beta, int8_t curr, uint64_t hash) -> int {
         auto it = tt_.find(hash);
         if (it != tt_.end()) {
             const TTEntry &e = it->second;
@@ -148,15 +156,16 @@ std::pair<int,int> NegamaxStrategy::computeMove(Board &board, int8_t player) {
         });
         for (auto [r,c] : moves) {
             if (alpha >= beta) break;
-            Board nb = b;
-            nb.placeStone(r,c,curr);
+            applyMove(b, {r, c}, curr);
             uint64_t nhash = hash ^ zobrist[r][c][(curr==1?0:1)];
-            if (nb.checkWin() == curr) {
+            if (b.checkWin() == curr) {
                 int winVal = 1000000 - 10*depth;
+                undoMove(b, {r, c});
                 tt_[hash] = {depth, winVal, 2};
                 return winVal;
             }
-            int val = -negamax(nb, depth-1, -beta, -alpha, (int8_t)-curr, nhash);
+            int val = -negamax(b, depth-1, -beta, -alpha, (int8_t)-curr, nhash);
+            undoMove(b, {r, c});
             if (val > maxVal) maxVal = val;
             if (val > alpha) alpha = val;
             if (alpha >= beta) break;
@@ -220,11 +229,14 @@ std::pair<int,int> NegamaxStrategy::computeMove(Board &board, int8_t player) {
                 outOfTime=true;
                 break;
             }
-            Board nb = board;
-            nb.placeStone(r,c,player);
+            applyMove(board, {r, c}, player);
             uint64_t nhash = rootHash ^ zobrist[r][c][(player==1?0:1)];
-            if (nb.checkWin() == player) return {r,c};
-            int val = -negamax(nb, depth-1, -beta, -alpha, (int8_t)-player, nhash);
+            if (board.checkWin() == player) {
+                undoMove(board, {r, c});
+                return {r,c};
+            }
+            int val = -negamax(board, depth-1, -beta, -alpha, (int8_t)-player, nhash);
+            undoMove(board, {r, c});
             if (val > currentBestVal) { currentBestVal = val; currentBest = {r,c}; }
             if (val > alpha) alpha = val;
             if (alpha >= beta) break;

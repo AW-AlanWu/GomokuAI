@@ -20,6 +20,14 @@ void Board::placeStone(size_t r, size_t c, int8_t player) {
     grid_[r][c] = player;
 }
 
+void Board::removeStone(size_t r, size_t c) {
+    if (!inBounds(r, c)) return;
+    if (grid_[r][c] != 0) {
+        grid_[r][c] = 0;
+        --placed_count_;
+    }
+}
+
 int8_t Board::at(size_t r, size_t c) const {
     return inBounds(r, c) ? grid_[r][c] : 0;
 }
