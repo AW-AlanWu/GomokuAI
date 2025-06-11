@@ -20,13 +20,13 @@ NegamaxStrategy::NegamaxStrategy() {
 bool NegamaxStrategy::makesFive(const Board &board, int r, int c, int8_t who) const {
     const int N = static_cast<int>(Board::N);
     for (auto &d : directions) {
-        int cnt = 1;
+        int count = 1;
         for (int step = 1; step < 5; ++step) {
             int nr = r + d[1] * step;
             int nc = c + d[0] * step;
             if (nr < 0 || nr >= N || nc < 0 || nc >= N) break;
             if (board.at(nr, nc) == who)
-                cnt++;
+                count++;
             else
                 break;
         }
@@ -35,11 +35,11 @@ bool NegamaxStrategy::makesFive(const Board &board, int r, int c, int8_t who) co
             int nc = c - d[0] * step;
             if (nr < 0 || nr >= N || nc < 0 || nc >= N) break;
             if (board.at(nr, nc) == who)
-                cnt++;
+                count++;
             else
                 break;
         }
-        if (cnt >= 5) return true;
+        if (count >= 5) return true;
     }
     return false;
 }
@@ -162,14 +162,14 @@ std::pair<int,int> NegamaxStrategy::computeMove(Board &board, int8_t player) {
         for (auto [r,c] : moves) {
             if (alpha >= beta) break;
             applyMove(b, {r, c}, curr);
-            uint64_t nhash = hash ^ zobrist[r][c][(curr==1?0:1)];
+            uint64_t newHash = hash ^ zobrist[r][c][(curr==1?0:1)];
             if (b.checkWin() == curr) {
                 int winVal = 1000000 - 10*depth;
                 undoMove(b, {r, c});
                 transpositionTable_[hash] = {depth, winVal, 2};
                 return winVal;
             }
-            int val = -negamax(b, depth-1, -beta, -alpha, (int8_t)-curr, nhash);
+            int val = -negamax(b, depth-1, -beta, -alpha, (int8_t)-curr, newHash);
             undoMove(b, {r, c});
             if (val > maxVal) maxVal = val;
             if (val > alpha) alpha = val;
@@ -236,12 +236,12 @@ std::pair<int,int> NegamaxStrategy::computeMove(Board &board, int8_t player) {
                 break;
             }
             applyMove(board, {r, c}, player);
-            uint64_t nhash = rootHash ^ zobrist[r][c][(player==1?0:1)];
+            uint64_t newHash = rootHash ^ zobrist[r][c][(player==1?0:1)];
             if (board.checkWin() == player) {
                 undoMove(board, {r, c});
                 return {r,c};
             }
-            int val = -negamax(board, depth-1, -beta, -alpha, (int8_t)-player, nhash);
+            int val = -negamax(board, depth-1, -beta, -alpha, (int8_t)-player, newHash);
             undoMove(board, {r, c});
             if (val > currentBestVal) { currentBestVal = val; currentBest = {r,c}; }
             if (val > alpha) alpha = val;
