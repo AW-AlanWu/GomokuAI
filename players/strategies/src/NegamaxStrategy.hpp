@@ -6,7 +6,7 @@
 class NegamaxStrategy : public AIAlgorithm {
 public:
     NegamaxStrategy();
-    std::pair<int, int> computeMove(Board &board, int8_t player) override;
+    std::pair<int, int> computeMove(Board board, int8_t player) override;
 
 private:
     struct TranspositionEntry {
