@@ -7,7 +7,7 @@ CXXFLAGS := -Wall -Wextra -Wpedantic \
 CXXFLAGS += -std=c++20 -O3 -flto -pthread
 
 INC_DIRS := core/include ui/include players/include \
-            players/strategies/include players/strategies/src include ui/src
+            players/strategies/include include
 CXXFLAGS += $(foreach dir,$(INC_DIRS), -I$(dir))
 
 #---- Directory Definitions ---------------------------------------------------
