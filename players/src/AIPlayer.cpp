@@ -197,11 +197,11 @@ std::pair<int, int> AIPlayer::getMove(const Board &board, int8_t player) {
             if (alpha >= beta) break;  // branch cannot improve
             // try the move
             Board newBoard = b;
-            newBoard.place(r, c, currentPlayer);
+            newBoard.placeStone(r, c, currentPlayer);
             // update hash for new board
             uint64_t newHash = hash ^ zobrist[r][c][(currentPlayer == 1 ? 0 : 1)];
             // check for a win
-            if (newBoard.checkWin(r, c)) {
+            if (newBoard.checkWin() == currentPlayer) {
                 // winning move, reward quicker wins
                 int winVal = 1000000 - 10 * depth;
                 // store as beta bound because it is winning
@@ -305,10 +305,10 @@ std::pair<int, int> AIPlayer::getMove(const Board &board, int8_t player) {
                 break;
             }
             Board newBoard = board;
-            newBoard.place(r, c, player);
+            newBoard.placeStone(r, c, player);
             uint64_t newHash = rootHash ^ zobrist[r][c][(player == 1 ? 0 : 1)];
             // check for win (should not happen)
-            if (newBoard.checkWin(r, c)) {
+            if (newBoard.checkWin() == player) {
                 return {r, c};
             }
             // search opponent response

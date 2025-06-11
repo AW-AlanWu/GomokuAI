@@ -1,9 +1,10 @@
 // main.cpp
 #include <cstring>
 #include <iostream>
+#include <vector>
 
 #include "AIPlayer.hpp"
-#include "Game.hpp"
+#include "GameLogic.hpp"
 #include "HumanPlayer.hpp"
 #include "Renderer.hpp"
 #include "Terminal.hpp"
@@ -19,24 +20,30 @@ int main(int argc, char *argv[]) {
     Board board;
     Renderer renderer(term, board);
 
-    std::unique_ptr<Player> p1;
+    Player *p1;
     if (p1_ai)
-        p1 = std::make_unique<AIPlayer>();
+        p1 = new AIPlayer();
     else
-        p1 = std::make_unique<HumanPlayer>(term, renderer);
+        p1 = new HumanPlayer(term, renderer);
 
-    std::unique_ptr<Player> p2;
+    Player *p2;
     if (p2_ai)
-        p2 = std::make_unique<AIPlayer>();
+        p2 = new AIPlayer();
     else
-        p2 = std::make_unique<HumanPlayer>(term, renderer);
+        p2 = new HumanPlayer(term, renderer);
+
+    std::vector<Player *> players{p1, p2};
 
     try {
-        Game g(term, board, renderer, std::move(p1), std::move(p2));
-        g.play();
+        GameLogic logic(board, players, renderer, term);
+        logic.run();
     } catch (const std::exception &e) {
         std::cerr << "Exception: " << e.what() << "\n";
+        delete p1;
+        delete p2;
         return 1;
     }
+    delete p1;
+    delete p2;
     return 0;
 }

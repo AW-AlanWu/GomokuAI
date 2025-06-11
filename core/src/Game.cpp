@@ -31,8 +31,8 @@ void Game::play() {
             std::cout << "Draw!\n";
             break;
         }
-        board_.place(r, c, current_player_);
-        if (board_.checkWin(r, c)) {
+        board_.placeStone(r, c, current_player_);
+        if (board_.checkWin() == current_player_) {
             renderer_.draw();
             term_.moveCursor(Board::N + 6, 1);
             term_.clearLine();

@@ -3,23 +3,26 @@
 
 #include <array>
 #include <cstdint>
+#include <cstddef>
 
 class Board {
 public:
-    static constexpr int N = 15;
+    static constexpr size_t N = 15;
     using Grid = std::array<std::array<int8_t, N>, N>;
 
     Board();
     void reset();
 
-    bool isEmpty(int r, int c) const;
+    bool isEmpty(size_t r, size_t c) const;
     bool isFull() const;
-    void place(int r, int c, int8_t player);
-    int8_t at(int r, int c) const;
-    bool checkWin(int r, int c) const;
+    int8_t at(size_t r, size_t c) const;
+    void placeStone(size_t r, size_t c, int8_t player);
+    int8_t checkWin() const;
 
 private:
     Grid grid_;
-    int placed_count_;
-    bool inBounds(int r, int c) const;
+    size_t placed_count_;
+
+    bool inBounds(size_t r, size_t c) const;
+    bool checkWinAt(size_t r, size_t c) const;
 };

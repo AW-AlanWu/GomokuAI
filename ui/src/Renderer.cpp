@@ -48,13 +48,13 @@ bool Renderer::handleKey(TermKey k) {
         cur_row_ = std::max(0, cur_row_ - 1);
         return true;
     case TermKey::Down:
-        cur_row_ = std::min(Board::N - 1, cur_row_ + 1);
+        cur_row_ = std::min<int>(static_cast<int>(Board::N - 1), cur_row_ + 1);
         return true;
     case TermKey::Left:
         cur_col_ = std::max(0, cur_col_ - 1);
         return true;
     case TermKey::Right:
-        cur_col_ = std::min(Board::N - 1, cur_col_ + 1);
+        cur_col_ = std::min<int>(static_cast<int>(Board::N - 1), cur_col_ + 1);
         return true;
     default:
         return false;
