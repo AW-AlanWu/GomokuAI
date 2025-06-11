@@ -1,28 +1,35 @@
 # Agent Guide
 
 This repository implements a terminal based Gomoku (Five in a row) game in
-C++20.  The code base is small and organised as follows:
+C++20.  The project is split into a few small modules:
 
 ```
-include/   # headers
-src/       # implementations
-tests/     # minimal test programs
-Makefile   # build logic for game and tests
+core/                  # board logic and game loop
+players/               # AI/Human player implementations
+players/strategies/    # AI algorithms (Negamax)
+ui/                    # terminal I/O and rendering helpers
+src/                   # main entry point
+tests/                 # minimal test programs
+Makefile               # build logic for game and tests
 ```
 
 Important components:
 
 * **Board** – manages board state and win detection.
-* **Renderer** & **Terminal** – draw to the terminal and handle key input.
-* **Game** – coordinates a match using two `Player` objects.
-* **AIPlayer** – simple heuristic + negamax search with alpha–beta pruning.
+* **GameLogic** – orchestrates turns between two `IPlayer` objects.
+* **Renderer** & **Terminal** – draw the board and handle key input.
+* **TerminalUI** & **TerminalInput** – user interface helpers used by
+  `HumanPlayer`.
+* **AIPlayer** – uses a simple heuristic and negamax search with
+  alpha–beta pruning.
 * **HumanPlayer** – reads arrow/enter/Q keys from the terminal.
 
 ## Building
 
-Run `make` to produce `bin/gomoku`.  `make clean` removes build artefacts.
-`./gen_compile_commands.sh` (requires `bear`) can generate
-`compile_commands.json` for tooling.
+Run `make` to produce `bin/gomoku` (the main executable).  `make clean` removes
+build artefacts.  `./gen_compile_commands.sh` (requires `bear`) can generate
+`compile_commands.json` for tooling.  Launch the game with `./bin/gomoku`
+optionally adding `--p1=ai` and/or `--p2=ai` to enable AI players.
 
 ## Testing
 
@@ -40,8 +47,8 @@ Always run the tests before committing.
 
 ## Miscellaneous
 
-* Do not commit generated files such as `bin/`, `build/`, `.cache/` or
-  `compile_commands.json`.
+* Do not commit generated files such as `bin/`, `build/`, `.cache/`, `.vscode/`
+  or `compile_commands.json`.
 * When adding features, supply matching tests in `tests/`.
 * The game accepts optional `--p1=ai` and `--p2=ai` flags to enable AI
   opponents.
