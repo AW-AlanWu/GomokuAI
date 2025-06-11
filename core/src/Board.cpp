@@ -1,13 +1,15 @@
 // Board.cpp
 #include "Board.hpp"
 
-Board::Board() : placedCount_(0) {
+Board::Board() {
     reset();
 }
 
 void Board::reset() {
     for (auto &row : grid_) row.fill(0);
     placedCount_ = 0;
+    lastRow_ = N;
+    lastCol_ = N;
 }
 
 bool Board::isEmpty(size_t r, size_t c) const {
@@ -22,6 +24,8 @@ void Board::placeStone(size_t r, size_t c, int8_t player) {
     if (!inBounds(r, c)) return;
     if (grid_[r][c] == 0) ++placedCount_;
     grid_[r][c] = player;
+    lastRow_ = r;
+    lastCol_ = c;
 }
 
 void Board::removeStone(size_t r, size_t c) {
@@ -29,6 +33,8 @@ void Board::removeStone(size_t r, size_t c) {
     if (grid_[r][c] != 0) {
         grid_[r][c] = 0;
         --placedCount_;
+        lastRow_ = N;
+        lastCol_ = N;
     }
 }
 
@@ -57,6 +63,10 @@ bool Board::checkWinAt(size_t r, size_t c) const {
 }
 
 int8_t Board::checkWin() const {
+    if (lastRow_ < N && lastCol_ < N && at(lastRow_, lastCol_) != 0) {
+        if (checkWinAt(lastRow_, lastCol_)) return at(lastRow_, lastCol_);
+        return 0;
+    }
     for (size_t r = 0; r < N; ++r) {
         for (size_t c = 0; c < N; ++c) {
             if (checkWinAt(r, c)) return at(r, c);
