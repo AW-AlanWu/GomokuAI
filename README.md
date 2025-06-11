@@ -14,34 +14,37 @@ C++20 實作，支援人類玩家與簡易 AI 對弈。
 
 ```bash
 .
-├── gen_compile_commands.sh   # 產生 compile_commands.json 的腳本
-├── include/                  # 標頭檔
-├── src/                      # 程式實作
-├── tests/                    # 測試程式
+├── core/                    # 棋盤與 GameLogic
+├── players/                 # 人類與 AI 玩家
+├── players/strategies/      # AI 搜尋演算法
+├── ui/                      # 終端機輸入與顯示
+├── src/                     # main.cpp
+├── tests/                   # 單元測試
+├── gen_compile_commands.sh  # 產生 compile_commands.json
 ├── Makefile
-├── README.md
-└── AGENTS.md                 # OpenAI Codex 引導文件
+└── AGENTS.md                # OpenAI Codex 引導文件
 ```
 
 ### 重要檔案
 
-- `include/` 與 `src/`：遊戲各模組的標頭與實作檔案。
-- `Board.hpp`：定義棋盤大小與勝負檢查函式。
-- `Game.hpp`：組合 `Terminal`、`Renderer` 等元件的遊戲主體。
-- `Terminal.hpp`：處理鍵盤輸入與 ANSI 控制序列。
+- `core/`：`Board` 與 `GameLogic` 的核心邏輯。
+- `ui/`：`Terminal`、`Renderer` 及對應介面。
+- `players/`：`HumanPlayer` 與 `AIPlayer` 實作。
+- `players/strategies/`：目前使用 Negamax 搜尋演算法，含置換表最佳化。
 
 主要模組說明：
 
-- `Board`, `Renderer`, `Terminal`：棋盤資料與終端機輸入/顯示處理
-- `AIPlayer`：AI 下棋邏輯
-- `HumanPlayer`：處理玩家輸入
+- `Board` 管理棋盤狀態與勝負判斷。
+- `Renderer` 和 `Terminal` 負責終端 I/O。
+- `AIPlayer` 以 Negamax+置換表搜尋下一步。
+- `HumanPlayer` 讀取使用者輸入。
 
 ## 物件關係與主要邏輯
 
 `Terminal` 會將終端機切換成 raw mode，讀取鍵盤輸入並輸出 ANSI 控制序列；
 `Renderer` 依賴 `Terminal` 與 `Board` 繪製棋盤並處理游標移動；
 `Player` 為取得下一步的介面，`HumanPlayer` 透過 `Renderer` 回報游標位置；
-`AIPlayer` 以簡單規則與 Negamax 搜尋產生落子。
+`AIPlayer` 使用 Negamax 演算法與置換表搜尋下一步。
 
 `Game` 統整以上元件，負責遊戲流程：繪製棋盤、取得玩家下一步、放置棋子並判斷勝負。
 
@@ -79,3 +82,8 @@ make test
 ```
 
 每個測試程式都會在 `bin/tests/` 下產生對應的可執行檔並被執行。
+
+## 注意事項
+
+- `bin/`、`build/`、`.cache/` 與 `compile_commands.json` 等產生檔不應提交進版控。
+- 新增功能時請同步撰寫對應測試並執行 `make test` 確認通過。
