@@ -1,5 +1,6 @@
 #include <cassert>
 #include <iostream>
+#include <stdexcept>
 #include <vector>
 
 #include "Board.hpp"
@@ -85,10 +86,26 @@ static void drawGame() {
     assert(ui.lastWinner == 0);
 }
 
+static void invalidPlayers() {
+    Board b;
+    DummyPlayer p1({});
+    std::vector<IPlayer *> players{&p1};
+    DummyUI ui;
+    DummyInput in;
+    bool thrown = false;
+    try {
+        GameLogic g(b, players, ui, in);
+    } catch (const std::invalid_argument &) {
+        thrown = true;
+    }
+    assert(thrown);
+}
+
 int main() {
     playerOneWins();
     earlyQuit();
     drawGame();
+    invalidPlayers();
     std::cout << "gamelogic tests passed\n";
     return 0;
 }
