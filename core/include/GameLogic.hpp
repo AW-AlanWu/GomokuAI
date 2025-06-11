@@ -13,7 +13,7 @@ class GameLogic {
     std::vector<IPlayer *> &players_;
     IGameUI &ui_;
     IInput &input_;
-    int8_t current_;
+    int8_t currentPlayer_;
 
 public:
     GameLogic(Board &b, std::vector<IPlayer *> &players, IGameUI &ui,
