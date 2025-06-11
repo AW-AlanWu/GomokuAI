@@ -3,6 +3,6 @@
 #include "Board.hpp"
 
 struct AIAlgorithm {
-    virtual std::pair<int,int> getMove(const Board&, int8_t) = 0;
+    virtual std::pair<int,int> computeMove(Board &board, int8_t player) = 0;
     virtual ~AIAlgorithm() = default;
 };

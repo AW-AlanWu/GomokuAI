@@ -4,9 +4,9 @@
 #include "IPlayer.hpp"
 #include "AIAlgorithm.hpp"
 class AIPlayer : public IPlayer {
-    AIAlgorithm &algorithm_;
+    AIAlgorithm *strategy_;
 public:
-    explicit AIPlayer(AIAlgorithm &algorithm);
+    explicit AIPlayer(AIAlgorithm *strategy);
     AIPlayer();
     std::pair<int, int> getMove(const Board &board, int8_t player) override;
 };

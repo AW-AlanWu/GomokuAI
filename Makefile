@@ -5,11 +5,11 @@ CXXFLAGS := -std=c++20 \
             -Wshadow -Wconversion \
             -O2
 
-INC_DIRS := core/include ui/include ui/src players/include include
+INC_DIRS := core/include ui/include ui/src players/include players/strategies/include players/strategies/src include
 CXXFLAGS += $(foreach dir,$(INC_DIRS), -I$(dir))
 
 #---- Directory Definitions ---------------------------------------------------
-SRC_DIRS      := core/src ui/src players/src src
+SRC_DIRS      := core/src ui/src players/src players/strategies/src src
 BUILD_DIR     := build
 BIN_DIR       := bin
 TEST_DIR      := tests
