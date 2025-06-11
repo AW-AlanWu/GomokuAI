@@ -66,9 +66,31 @@ static void earlyQuit() {
     assert(ui.lastWinner == 0);
 }
 
+static void drawGame() {
+    Board b;
+    for (size_t r = 0; r < Board::N; ++r) {
+        int8_t start = (r % 4 < 2) ? 1 : -1;
+        for (size_t c = 0; c < Board::N; ++c) {
+            if (r == Board::N - 1 && c == Board::N - 1) break;
+            int8_t val = (c % 2 == 0) ? start : -start;
+            b.placeStone(r, c, val);
+        }
+    }
+    DummyPlayer p1({{Board::N - 1, Board::N - 1}});
+    DummyPlayer p2({});
+    std::vector<IPlayer *> players{&p1, &p2};
+    DummyUI ui;
+    DummyInput in;
+    GameLogic g(b, players, ui, in);
+    int8_t winner = g.run();
+    assert(winner == 0);
+    assert(ui.lastWinner == 0);
+}
+
 int main() {
     playerOneWins();
     earlyQuit();
+    drawGame();
     std::cout << "gamelogic tests passed\n";
     return 0;
 }
