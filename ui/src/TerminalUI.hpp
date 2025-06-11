@@ -5,6 +5,7 @@
 class TerminalUI : public IGameUI {
     Renderer &renderer_;
     Terminal &term_;
+
 public:
     TerminalUI(Renderer &r, Terminal &t) : renderer_(r), term_(t) {}
     void drawBoard(const Board &board) override;

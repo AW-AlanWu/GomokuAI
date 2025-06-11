@@ -1,10 +1,11 @@
 // AIPlayer.hpp
 #pragma once
 
-#include "IPlayer.hpp"
 #include "AIAlgorithm.hpp"
+#include "IPlayer.hpp"
 class AIPlayer : public IPlayer {
     AIAlgorithm *strategy_;
+
 public:
     explicit AIPlayer(AIAlgorithm *strategy);
     AIPlayer();

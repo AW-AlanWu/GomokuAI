@@ -1,7 +1,9 @@
 // Board.cpp
 #include "Board.hpp"
 
-Board::Board() : placedCount_(0) { reset(); }
+Board::Board() : placedCount_(0) {
+    reset();
+}
 
 void Board::reset() {
     for (auto &row : grid_) row.fill(0);
@@ -12,7 +14,9 @@ bool Board::isEmpty(size_t r, size_t c) const {
     return inBounds(r, c) && grid_[r][c] == 0;
 }
 
-bool Board::isFull() const { return placedCount_ == N * N; }
+bool Board::isFull() const {
+    return placedCount_ == N * N;
+}
 
 void Board::placeStone(size_t r, size_t c, int8_t player) {
     if (!inBounds(r, c)) return;
@@ -61,4 +65,6 @@ int8_t Board::checkWin() const {
     return 0;
 }
 
-bool Board::inBounds(size_t r, size_t c) const { return r < N && c < N; }
+bool Board::inBounds(size_t r, size_t c) const {
+    return r < N && c < N;
+}

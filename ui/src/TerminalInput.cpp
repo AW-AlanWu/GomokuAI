@@ -1,7 +1,7 @@
 #include "TerminalInput.hpp"
 #include <stdexcept>
 
-std::pair<int,int> TerminalInput::getSelection() {
+std::pair<int, int> TerminalInput::getSelection() {
     while (true) {
         if (board_.isFull()) return {-1, -1};
         TermKey k = term_.readKey();

@@ -23,8 +23,8 @@ void Renderer::draw() {
         out += std::to_string(r + 1);
         out += " | ";
         for (size_t c = 0; c < Board::N; ++c) {
-            bool highlight = (r == static_cast<size_t>(cur_row_) &&
-                              c == static_cast<size_t>(cur_col_));
+            bool highlight =
+                (r == static_cast<size_t>(cur_row_) && c == static_cast<size_t>(cur_col_));
             if (highlight) out += "\x1b[7m";
             int cell = board_.at(r, c);
             if (cell == 0)

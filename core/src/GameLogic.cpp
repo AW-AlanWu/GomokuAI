@@ -1,7 +1,6 @@
 #include "GameLogic.hpp"
 
-GameLogic::GameLogic(Board &b, std::vector<IPlayer *> &players, IGameUI &ui,
-                     IInput &input)
+GameLogic::GameLogic(Board &b, std::vector<IPlayer *> &players, IGameUI &ui, IInput &input)
     : board_(b), players_(players), ui_(ui), input_(input), currentPlayer_(1) {}
 
 int8_t GameLogic::run() {

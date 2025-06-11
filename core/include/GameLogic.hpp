@@ -4,9 +4,9 @@
 #include <vector>
 
 #include "Board.hpp"
-#include "IPlayer.hpp"
 #include "IGameUI.hpp"
 #include "IInput.hpp"
+#include "IPlayer.hpp"
 
 class GameLogic {
     Board &board_;
@@ -16,8 +16,6 @@ class GameLogic {
     int8_t currentPlayer_;
 
 public:
-    GameLogic(Board &b, std::vector<IPlayer *> &players, IGameUI &ui,
-              IInput &input);
+    GameLogic(Board &b, std::vector<IPlayer *> &players, IGameUI &ui, IInput &input);
     int8_t run();
 };
-

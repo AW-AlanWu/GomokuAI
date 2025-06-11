@@ -2,8 +2,8 @@
 #pragma once
 
 #include <array>
-#include <cstdint>
 #include <cstddef>
+#include <cstdint>
 
 class Board {
 public:

@@ -9,8 +9,8 @@
 #include "IPlayer.hpp"
 #include "Renderer.hpp"
 #include "Terminal.hpp"
-#include "TerminalUI.hpp"
 #include "TerminalInput.hpp"
+#include "TerminalUI.hpp"
 
 int main(int argc, char *argv[]) {
     bool p1_ai = false, p2_ai = false;

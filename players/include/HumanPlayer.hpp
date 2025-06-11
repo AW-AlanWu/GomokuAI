@@ -1,9 +1,9 @@
 // HumanPlayer.hpp
 #pragma once
 
-#include "IPlayer.hpp"
 #include "IGameUI.hpp"
 #include "IInput.hpp"
+#include "IPlayer.hpp"
 
 class HumanPlayer : public IPlayer {
     IInput &input_;
