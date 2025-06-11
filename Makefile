@@ -1,22 +1,30 @@
 #---- Compiler Settings -------------------------------------------------------
 CXX      := g++
-CXXFLAGS := -std=c++20 \
-            -Wall -Wextra -Wpedantic \
-            -Wshadow -Wconversion \
-            -O2
+CXXFLAGS := -Wall -Wextra -Wpedantic \
+            -Wshadow -Wconversion
 
-INC_DIRS := core/include ui/include ui/src players/include players/strategies/include players/strategies/src include
+# Use modern C++ and optimize aggressively
+CXXFLAGS += -std=c++20 -O3 -flto -pthread
+
+INC_DIRS := core/include ui/include players/include \
+            players/strategies/include players/strategies/src include ui/src
 CXXFLAGS += $(foreach dir,$(INC_DIRS), -I$(dir))
 
 #---- Directory Definitions ---------------------------------------------------
 SRC_DIRS      := core/src ui/src players/src players/strategies/src src
+
+# Explicit source file lists for compile_commands generation
+CORE_SRCS     := $(wildcard core/src/*.cpp)
+UI_SRCS       := $(wildcard ui/src/*.cpp)
+PLAYERS_SRCS  := $(wildcard players/src/*.cpp)
+SRCS          := $(CORE_SRCS) $(UI_SRCS) $(PLAYERS_SRCS) $(wildcard src/*.cpp) \
+                 $(wildcard players/strategies/src/*.cpp)
 BUILD_DIR     := build
 BIN_DIR       := bin
 TEST_DIR      := tests
 TEST_BIN_DIR  := $(BIN_DIR)/tests
 
 #---- Auto collect sources, objects and dependencies -------------------------
-SRCS    := $(foreach dir,$(SRC_DIRS),$(wildcard $(dir)/*.cpp))
 OBJS    := $(addprefix $(BUILD_DIR)/,$(SRCS:.cpp=.o))
 DEPS    := $(addprefix $(BUILD_DIR)/,$(SRCS:.cpp=.d))
 
