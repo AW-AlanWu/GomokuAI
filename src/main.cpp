@@ -2,6 +2,7 @@
 #include <cstring>
 #include <iostream>
 #include <vector>
+#include <memory>
 
 #include "AIPlayer.hpp"
 #include "GameLogic.hpp"
@@ -25,30 +26,31 @@ int main(int argc, char *argv[]) {
     TerminalUI ui(renderer, term);
     TerminalInput input(term, renderer, board);
 
-    IPlayer *p1;
+    std::unique_ptr<IPlayer> p1;
     if (p1_ai)
-        p1 = new AIPlayer();
+        p1 = std::make_unique<AIPlayer>();
     else
-        p1 = new HumanPlayer(input, ui);
+        p1 = std::make_unique<HumanPlayer>(input, ui);
 
-    IPlayer *p2;
+    std::unique_ptr<IPlayer> p2;
     if (p2_ai)
-        p2 = new AIPlayer();
+        p2 = std::make_unique<AIPlayer>();
     else
-        p2 = new HumanPlayer(input, ui);
+        p2 = std::make_unique<HumanPlayer>(input, ui);
 
-    std::vector<IPlayer *> players{p1, p2};
+    std::vector<std::unique_ptr<IPlayer>> players;
+    players.push_back(std::move(p1));
+    players.push_back(std::move(p2));
+
+    std::vector<IPlayer *> playerPtrs;
+    for (auto &ptr : players) playerPtrs.push_back(ptr.get());
 
     try {
-        GameLogic logic(board, players, ui, input);
+        GameLogic logic(board, playerPtrs, ui, input);
         logic.run();
     } catch (const std::exception &e) {
         std::cerr << "Exception: " << e.what() << "\n";
-        delete p1;
-        delete p2;
         return 1;
     }
-    delete p1;
-    delete p2;
     return 0;
 }
