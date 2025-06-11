@@ -1,7 +1,7 @@
 #include "GameLogic.hpp"
 
-GameLogic::GameLogic(Board &b, std::vector<IPlayer *> &players, IGameUI &ui, IInput &input)
-    : board_(b), players_(players), ui_(ui), input_(input), currentPlayer_(1) {
+GameLogic::GameLogic(Board &b, std::vector<IPlayer *> &players, IGameUI &ui)
+    : board_(b), players_(players), ui_(ui), currentPlayer_(1) {
     if (players_.size() != 2) {
         throw std::invalid_argument("GameLogic requires exactly two players");
     }

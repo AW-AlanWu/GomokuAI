@@ -6,7 +6,6 @@
 #include "Board.hpp"
 #include "GameLogic.hpp"
 #include "IGameUI.hpp"
-#include "IInput.hpp"
 #include "IPlayer.hpp"
 
 class DummyPlayer : public IPlayer {
@@ -34,19 +33,13 @@ public:
     }
 };
 
-class DummyInput : public IInput {
-public:
-    std::pair<int, int> getSelection() override { return {-1, -1}; }
-};
-
 static void playerOneWins() {
     Board b;
     DummyPlayer p1({{7, 0}, {7, 1}, {7, 2}, {7, 3}, {7, 4}});
     DummyPlayer p2({{0, 0}, {0, 1}, {0, 2}, {0, 3}});
     std::vector<IPlayer *> players{&p1, &p2};
     DummyUI ui;
-    DummyInput in;
-    GameLogic g(b, players, ui, in);
+    GameLogic g(b, players, ui);
     int8_t winner = g.run();
     assert(winner == 1);
     assert(ui.lastWinner == 1);
@@ -58,8 +51,7 @@ static void earlyQuit() {
     DummyPlayer p2({});
     std::vector<IPlayer *> players{&p1, &p2};
     DummyUI ui;
-    DummyInput in;
-    GameLogic g(b, players, ui, in);
+    GameLogic g(b, players, ui);
     int8_t winner = g.run();
     assert(winner == 0);
     assert(ui.lastWinner == 0);
@@ -79,8 +71,7 @@ static void drawGame() {
     DummyPlayer p2({});
     std::vector<IPlayer *> players{&p1, &p2};
     DummyUI ui;
-    DummyInput in;
-    GameLogic g(b, players, ui, in);
+    GameLogic g(b, players, ui);
     int8_t winner = g.run();
     assert(winner == 0);
     assert(ui.lastWinner == 0);
@@ -91,10 +82,9 @@ static void invalidPlayers() {
     DummyPlayer p1({});
     std::vector<IPlayer *> players{&p1};
     DummyUI ui;
-    DummyInput in;
     bool thrown = false;
     try {
-        GameLogic g(b, players, ui, in);
+        GameLogic g(b, players, ui);
     } catch (const std::invalid_argument &) {
         thrown = true;
     }

@@ -46,7 +46,7 @@ int main(int argc, char *argv[]) {
     for (auto &ptr : players) playerPtrs.push_back(ptr.get());
 
     try {
-        GameLogic logic(board, playerPtrs, ui, input);
+        GameLogic logic(board, playerPtrs, ui);
         logic.run();
     } catch (const std::exception &e) {
         std::cerr << "Exception: " << e.what() << "\n";
