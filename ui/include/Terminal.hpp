@@ -20,9 +20,6 @@ public:
     void writeBuffer(const std::string &s);
 
     // ANSI operations
-    void clearScreen();
     void clearLine();
     void moveCursor(int row, int col);
-    void hideCursor();
-    void showCursor();
 };

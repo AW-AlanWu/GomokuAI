@@ -26,9 +26,6 @@ Terminal::~Terminal() {
     disableRawMode();
 }
 
-void Terminal::clearScreen() {
-    writeBuffer("\x1b[2J");
-}
 void Terminal::clearLine() {
     writeBuffer("\x1b[2K");
 }
@@ -36,12 +33,6 @@ void Terminal::moveCursor(int r, int c) {
     char buf[32];
     int len = snprintf(buf, sizeof(buf), "\x1b[%d;%dH", r, c);
     writeBuffer(std::string(buf, buf + len));
-}
-void Terminal::hideCursor() {
-    writeBuffer("\x1b[?25l");
-}
-void Terminal::showCursor() {
-    writeBuffer("\x1b[?25h");
 }
 
 TermKey Terminal::readKey() {
