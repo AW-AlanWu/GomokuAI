@@ -65,3 +65,8 @@ void Terminal::writeBuffer(const std::string &s) {
     auto _ = ::write(STDOUT_FILENO, s.data(), s.size());
     (void)_;
 }
+
+void Terminal::writeLine(const std::string &s) {
+    writeBuffer(s);
+    writeBuffer("\n");
+}

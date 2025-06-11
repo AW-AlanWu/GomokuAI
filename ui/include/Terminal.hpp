@@ -18,6 +18,7 @@ public:
 
     TermKey readKey();
     void writeBuffer(const std::string &s);
+    void writeLine(const std::string &s);
 
     // ANSI operations
     void clearLine();
