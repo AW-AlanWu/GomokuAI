@@ -43,7 +43,7 @@ static void playerOneWins() {
     int8_t winner = g.run();
     assert(winner == 1);
     assert(ui.lastWinner == 1);
-    assert(ui.drawCount == 10); // 9 turns + final board
+    assert(ui.drawCount == 10);  // 9 turns + final board
 }
 
 static void earlyQuit() {
@@ -56,7 +56,7 @@ static void earlyQuit() {
     int8_t winner = g.run();
     assert(winner == 0);
     assert(ui.lastWinner == 0);
-    assert(ui.drawCount == 1); // one turn with early quit
+    assert(ui.drawCount == 1);  // one turn with early quit
 }
 
 static void drawGame() {
@@ -77,7 +77,7 @@ static void drawGame() {
     int8_t winner = g.run();
     assert(winner == 0);
     assert(ui.lastWinner == 0);
-    assert(ui.drawCount == 2); // one turn plus final board
+    assert(ui.drawCount == 2);  // one turn plus final board
 }
 
 static void invalidPlayers() {

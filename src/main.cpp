@@ -1,8 +1,8 @@
 // main.cpp
 #include <cstring>
 #include <iostream>
-#include <vector>
 #include <memory>
+#include <vector>
 
 #include "AIPlayer.hpp"
 #include "GameLogic.hpp"

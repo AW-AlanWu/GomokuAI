@@ -1,8 +1,7 @@
 #include "AIPlayer.hpp"
 #include "NegamaxStrategy.hpp"
 
-AIPlayer::AIPlayer(std::unique_ptr<AIAlgorithm> strategy)
-    : strategy_(std::move(strategy)) {
+AIPlayer::AIPlayer(std::unique_ptr<AIAlgorithm> strategy) : strategy_(std::move(strategy)) {
     if (!strategy_) strategy_ = std::make_unique<NegamaxStrategy>();
 }
 
