@@ -25,8 +25,8 @@ static void boundaryChecks() {
     Terminal t;
     Board b;
     Renderer r(t, b);
-    for (int i = 0; i < Board::N * 2; ++i) r.handleKey(TermKey::Up);
-    for (int i = 0; i < Board::N * 2; ++i) r.handleKey(TermKey::Left);
+    for (size_t i = 0; i < Board::N * 2; ++i) r.handleKey(TermKey::Up);
+    for (size_t i = 0; i < Board::N * 2; ++i) r.handleKey(TermKey::Left);
     auto pos = r.cursor();
     assert(pos.first == 0 && pos.second == 0);
     r.handleKey(TermKey::Up);
@@ -34,8 +34,8 @@ static void boundaryChecks() {
     pos = r.cursor();
     assert(pos.first == 0 && pos.second == 0);
 
-    for (int i = 0; i < Board::N * 2; ++i) r.handleKey(TermKey::Down);
-    for (int i = 0; i < Board::N * 2; ++i) r.handleKey(TermKey::Right);
+    for (size_t i = 0; i < Board::N * 2; ++i) r.handleKey(TermKey::Down);
+    for (size_t i = 0; i < Board::N * 2; ++i) r.handleKey(TermKey::Right);
     pos = r.cursor();
     assert(pos.first == Board::N - 1 && pos.second == Board::N - 1);
     r.handleKey(TermKey::Down);

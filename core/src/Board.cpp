@@ -1,35 +1,43 @@
 // Board.cpp
 #include "Board.hpp"
 
-Board::Board() : placed_count_(0) {
+Board::Board() : placedCount_(0) {
     reset();
 }
 
 void Board::reset() {
     for (auto &row : grid_) row.fill(0);
-    placed_count_ = 0;
+    placedCount_ = 0;
 }
 
-bool Board::isEmpty(int r, int c) const {
+bool Board::isEmpty(size_t r, size_t c) const {
     return inBounds(r, c) && grid_[r][c] == 0;
 }
 
 bool Board::isFull() const {
-    return placed_count_ == N * N;
+    return placedCount_ == N * N;
 }
 
-void Board::place(int r, int c, int8_t player) {
+void Board::placeStone(size_t r, size_t c, int8_t player) {
     if (!inBounds(r, c)) return;
-    if (grid_[r][c] == 0) ++placed_count_;
+    if (grid_[r][c] == 0) ++placedCount_;
     grid_[r][c] = player;
 }
 
-int8_t Board::at(int r, int c) const {
+void Board::removeStone(size_t r, size_t c) {
+    if (!inBounds(r, c)) return;
+    if (grid_[r][c] != 0) {
+        grid_[r][c] = 0;
+        --placedCount_;
+    }
+}
+
+int8_t Board::at(size_t r, size_t c) const {
     return inBounds(r, c) ? grid_[r][c] : 0;
 }
 
 // Efficient win check (scans in four directions)
-bool Board::checkWin(int r, int c) const {
+bool Board::checkWinAt(size_t r, size_t c) const {
     static constexpr std::array<std::pair<int, int>, 4> dirs = {{{1, 0}, {0, 1}, {1, 1}, {1, -1}}};
     int8_t player = at(r, c);
     if (player == 0) return false;
@@ -48,6 +56,15 @@ bool Board::checkWin(int r, int c) const {
     return false;
 }
 
-bool Board::inBounds(int r, int c) const {
-    return r >= 0 && r < N && c >= 0 && c < N;
+int8_t Board::checkWin() const {
+    for (size_t r = 0; r < N; ++r) {
+        for (size_t c = 0; c < N; ++c) {
+            if (checkWinAt(r, c)) return at(r, c);
+        }
+    }
+    return 0;
+}
+
+bool Board::inBounds(size_t r, size_t c) const {
+    return r < N && c < N;
 }

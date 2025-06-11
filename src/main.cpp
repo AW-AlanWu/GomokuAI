@@ -1,12 +1,16 @@
 // main.cpp
 #include <cstring>
 #include <iostream>
+#include <vector>
 
 #include "AIPlayer.hpp"
-#include "Game.hpp"
+#include "GameLogic.hpp"
 #include "HumanPlayer.hpp"
+#include "IPlayer.hpp"
 #include "Renderer.hpp"
 #include "Terminal.hpp"
+#include "TerminalInput.hpp"
+#include "TerminalUI.hpp"
 
 int main(int argc, char *argv[]) {
     bool p1_ai = false, p2_ai = false;
@@ -18,25 +22,33 @@ int main(int argc, char *argv[]) {
     Terminal term;
     Board board;
     Renderer renderer(term, board);
+    TerminalUI ui(renderer, term);
+    TerminalInput input(term, renderer, board);
 
-    std::unique_ptr<Player> p1;
+    IPlayer *p1;
     if (p1_ai)
-        p1 = std::make_unique<AIPlayer>();
+        p1 = new AIPlayer();
     else
-        p1 = std::make_unique<HumanPlayer>(term, renderer);
+        p1 = new HumanPlayer(input, ui);
 
-    std::unique_ptr<Player> p2;
+    IPlayer *p2;
     if (p2_ai)
-        p2 = std::make_unique<AIPlayer>();
+        p2 = new AIPlayer();
     else
-        p2 = std::make_unique<HumanPlayer>(term, renderer);
+        p2 = new HumanPlayer(input, ui);
+
+    std::vector<IPlayer *> players{p1, p2};
 
     try {
-        Game g(term, board, renderer, std::move(p1), std::move(p2));
-        g.play();
+        GameLogic logic(board, players, ui, input);
+        logic.run();
     } catch (const std::exception &e) {
         std::cerr << "Exception: " << e.what() << "\n";
+        delete p1;
+        delete p2;
         return 1;
     }
+    delete p1;
+    delete p2;
     return 0;
 }
