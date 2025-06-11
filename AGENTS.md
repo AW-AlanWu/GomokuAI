@@ -13,6 +13,10 @@ tests/                 # unit tests
 Makefile               # build rules
 ```
 
+Each top-level module (`core/`, `players/`, `players/strategies/`, and `ui/`) is
+divided into `include/` and `src/` subdirectories.  Public headers live under
+`include/` while implementation files are kept in `src/`.
+
 Key pieces:
 
 * **Board** – manages a 15x15 grid and win detection.
