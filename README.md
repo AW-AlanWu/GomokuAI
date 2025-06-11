@@ -14,10 +14,18 @@ C++20 實作，支援人類玩家與簡易 AI 對弈。
 
 ```bash
 .
-├── core/                    # 棋盤與 GameLogic
-├── players/                 # 人類與 AI 玩家
-├── players/strategies/      # AI 搜尋演算法
-├── ui/                      # 終端機輸入與顯示
+├── core/
+│   ├── include/             # Board 與 GameLogic 標頭
+│   └── src/                 # 相關實作
+├── players/
+│   ├── include/             # IPlayer、AIPlayer、HumanPlayer 標頭
+│   ├── src/                 # 玩家實作
+│   └── strategies/
+│       ├── include/         # 搜尋演算法標頭
+│       └── src/             # 搜尋演算法實作
+├── ui/
+│   ├── include/             # Terminal 與 Renderer 等介面
+│   └── src/                 # 相關實作
 ├── src/                     # main.cpp
 ├── tests/                   # 單元測試
 ├── gen_compile_commands.sh  # 產生 compile_commands.json
@@ -27,10 +35,10 @@ C++20 實作，支援人類玩家與簡易 AI 對弈。
 
 ### 重要檔案
 
-- `core/`：`Board` 與 `GameLogic` 的核心邏輯。
-- `ui/`：`Terminal`、`Renderer` 及對應介面。
-- `players/`：`HumanPlayer` 與 `AIPlayer` 實作。
-- `players/strategies/`：目前使用 Negamax 搜尋演算法，含置換表最佳化。
+- `core/`：`Board` 與 `GameLogic`，公共標頭位於 `include/`，實作於 `src/`。
+- `ui/`：`Terminal`、`Renderer` 等終端介面，亦分為 `include/` 與 `src/`。
+- `players/`：`HumanPlayer`、`AIPlayer`，同樣採 `include/`、`src/` 分離。
+- `players/strategies/`：Negamax 搜尋演算法及其實作。
 
 主要模組說明：
 
