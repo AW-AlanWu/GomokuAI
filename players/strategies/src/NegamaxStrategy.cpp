@@ -65,7 +65,7 @@ void NegamaxStrategy::undoMove(Board &board, std::pair<int, int> pos) {
     board.removeStone(pos.first, pos.second);
 }
 
-std::pair<int, int> NegamaxStrategy::computeMove(Board &board, int8_t player) {
+std::pair<int, int> NegamaxStrategy::computeMove(Board board, int8_t player) {
     int8_t opponent = (player == 1 ? -1 : 1);
     for (size_t r = 0; r < Board::N; ++r) {
         for (size_t c = 0; c < Board::N; ++c) {
