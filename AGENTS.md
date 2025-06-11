@@ -19,7 +19,7 @@ Key pieces:
 * **GameLogic** – runs a match between two `IPlayer` instances.
 * **Renderer** and **Terminal** – draw the board and read keys.
 * **TerminalUI** and **TerminalInput** – UI helpers for `HumanPlayer`.
-* **AIPlayer** – default strategy is a negamax search with a transposition table.
+* **AIPlayer** – uses an iterative deepening negamax search with a transposition table.
 
 ## Building
 
