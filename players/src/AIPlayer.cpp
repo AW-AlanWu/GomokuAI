@@ -7,6 +7,7 @@
 #include <vector>
 
 #include "AIPlayer.hpp"
+#include "AIAlgorithm.hpp"
 
 // Direction vectors for checking lines (dx, dy)
 static constexpr int DIR[4][2] = {
@@ -17,7 +18,7 @@ static constexpr int DIR[4][2] = {
 };
 
 // Check if placing piece `who` at (r,c) would form five in a row
-bool makesFive(const Board &board, int r, int c, int8_t who) {
+static bool makesFive(const Board &board, int r, int c, int8_t who) {
     for (auto &d : DIR) {
         int cnt = 1;  // count (r,c) itself
         // forward direction
@@ -46,7 +47,7 @@ bool makesFive(const Board &board, int r, int c, int8_t who) {
 }
 
 // Check if cell (r,c) has any neighboring piece (used to prune moves)
-bool hasNeighbor(const Board &board, int r, int c) {
+static bool hasNeighbor(const Board &board, int r, int c) {
     for (int dr = -1; dr <= 1; ++dr) {
         for (int dc = -1; dc <= 1; ++dc) {
             if (dr == 0 && dc == 0) continue;
@@ -58,7 +59,13 @@ bool hasNeighbor(const Board &board, int r, int c) {
     return false;
 }
 
-std::pair<int, int> AIPlayer::getMove(const Board &board, int8_t player) {
+class DefaultAIAlgorithm : public AIAlgorithm {
+public:
+    std::pair<int, int> getMove(const Board &board, int8_t player) override;
+};
+
+std::pair<int, int> DefaultAIAlgorithm::getMove(const Board &board,
+                                                int8_t player) {
     int8_t opponent = (player == 1 ? -1 : 1);
 
     // 1. If placing here wins immediately, do it.
@@ -360,4 +367,16 @@ std::pair<int, int> AIPlayer::getMove(const Board &board, int8_t player) {
     }
 
     return bestMove;
+}
+
+namespace {
+DefaultAIAlgorithm defaultAIAlg;
+}
+
+AIPlayer::AIPlayer(AIAlgorithm &algorithm) : algorithm_(algorithm) {}
+
+AIPlayer::AIPlayer() : algorithm_(defaultAIAlg) {}
+
+std::pair<int, int> AIPlayer::getMove(const Board &board, int8_t player) {
+    return algorithm_.getMove(board, player);
 }

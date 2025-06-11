@@ -1,15 +1,15 @@
 // HumanPlayer.hpp
 #pragma once
 
-#include "Player.hpp"
-#include "Renderer.hpp"
-#include "Terminal.hpp"
+#include "IPlayer.hpp"
+#include "IGameUI.hpp"
+#include "IInput.hpp"
 
-class HumanPlayer : public Player {
-    Terminal &term_;
-    Renderer &renderer_;
+class HumanPlayer : public IPlayer {
+    IInput &input_;
+    IGameUI &ui_;
 
 public:
-    HumanPlayer(Terminal &t, Renderer &r);
+    HumanPlayer(IInput &input, IGameUI &ui);
     std::pair<int, int> getMove(const Board &board, int8_t player) override;
 };

@@ -4,7 +4,7 @@
 #include <vector>
 
 #include "Board.hpp"
-#include "Player.hpp"
+#include "IPlayer.hpp"
 #include "IGameUI.hpp"
 #include "IInput.hpp"
 

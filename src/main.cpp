@@ -6,6 +6,7 @@
 #include "AIPlayer.hpp"
 #include "GameLogic.hpp"
 #include "HumanPlayer.hpp"
+#include "IPlayer.hpp"
 #include "Renderer.hpp"
 #include "Terminal.hpp"
 #include "TerminalUI.hpp"
@@ -24,19 +25,19 @@ int main(int argc, char *argv[]) {
     TerminalUI ui(renderer, term);
     TerminalInput input(term, renderer, board);
 
-    Player *p1;
+    IPlayer *p1;
     if (p1_ai)
         p1 = new AIPlayer();
     else
-        p1 = new HumanPlayer(term, renderer);
+        p1 = new HumanPlayer(input, ui);
 
-    Player *p2;
+    IPlayer *p2;
     if (p2_ai)
         p2 = new AIPlayer();
     else
-        p2 = new HumanPlayer(term, renderer);
+        p2 = new HumanPlayer(input, ui);
 
-    std::vector<Player *> players{p1, p2};
+    std::vector<IPlayer *> players{p1, p2};
 
     try {
         GameLogic logic(board, players, ui, input);
