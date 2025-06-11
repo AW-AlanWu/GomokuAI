@@ -12,3 +12,5 @@ public:
     // (row, col)
     virtual std::pair<int, int> getMove(const Board &board, int8_t player) = 0;
 };
+
+using IPlayer = Player;

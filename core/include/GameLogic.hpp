@@ -10,13 +10,13 @@
 
 class GameLogic {
     Board &board_;
-    std::vector<Player *> &players_;
+    std::vector<IPlayer *> &players_;
     IGameUI &ui_;
     IInput &input_;
     int8_t current_;
 
 public:
-    GameLogic(Board &b, std::vector<Player *> &players, IGameUI &ui,
+    GameLogic(Board &b, std::vector<IPlayer *> &players, IGameUI &ui,
               IInput &input);
     int8_t run();
 };
