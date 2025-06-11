@@ -9,12 +9,12 @@ public:
     std::pair<int, int> computeMove(Board &board, int8_t player) override;
 
 private:
-    struct TTEntry {
+    struct TranspositionEntry {
         int depth;
         int value;
         uint8_t flag;
     };
-    std::unordered_map<uint64_t, TTEntry> tt_;
+    std::unordered_map<uint64_t, TranspositionEntry> transpositionTable_;
 
     bool makesFive(const Board &board, int r, int c, int8_t who) const;
     bool hasNeighbor(const Board &board, int r, int c) const;

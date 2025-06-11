@@ -22,7 +22,7 @@ public:
 
 private:
     Grid grid_;
-    size_t placed_count_;
+    size_t placedCount_;
 
     bool inBounds(size_t r, size_t c) const;
     bool checkWinAt(size_t r, size_t c) const;
