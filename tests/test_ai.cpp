@@ -24,8 +24,8 @@ static void blockOpponent() {
 
 static void fullBoard() {
     Board b;
-    for (int r = 0; r < Board::N; ++r)
-        for (int c = 0; c < Board::N; ++c) b.placeStone(r, c, 1);
+    for (size_t r = 0; r < Board::N; ++r)
+        for (size_t c = 0; c < Board::N; ++c) b.placeStone(r, c, 1);
     AIPlayer ai;
     auto move = ai.getMove(b, 1);
     assert(move.first == -1 && move.second == -1);
