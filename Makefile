@@ -1,74 +1,59 @@
-#---- Compiler Settings -------------------------------------------------------
-CXX      := g++
-CXXFLAGS := -Wall -Wextra -Wpedantic \
-            -Wshadow -Wconversion
+#---- Compiler settings -------------------------------------------------------
+CXX := g++
 
-# Use modern C++ and optimize aggressively
-CXXFLAGS += -std=c++20 -O3 -flto -pthread
+CXXFLAGS := -Wall -Wextra -Wpedantic \
+            -Wshadow -Wconversion \
+                -std=c++20 -O3 -flto -pthread
 
 INC_DIRS := core/include ui/include players/include \
             players/strategies/include include
-CXXFLAGS += $(foreach dir,$(INC_DIRS), -I$(dir))
+CXXFLAGS += $(INC_DIRS:%=-I%)
 
-#---- Directory Definitions ---------------------------------------------------
-SRC_DIRS      := core/src ui/src players/src players/strategies/src src
+#---- Directory layout --------------------------------------------------------
+SRC_DIRS := core/src ui/src players/src players/strategies/src src
 
-# Explicit source file lists for compile_commands generation
-CORE_SRCS     := $(wildcard core/src/*.cpp)
-UI_SRCS       := $(wildcard ui/src/*.cpp)
-PLAYERS_SRCS  := $(wildcard players/src/*.cpp)
-SRCS          := $(CORE_SRCS) $(UI_SRCS) $(PLAYERS_SRCS) $(wildcard src/*.cpp) \
-                 $(wildcard players/strategies/src/*.cpp)
-BUILD_DIR     := build
-BIN_DIR       := bin
-TEST_DIR      := tests
-TEST_BIN_DIR  := $(BIN_DIR)/tests
+BUILD_DIR    := build
+BIN_DIR      := bin
+TEST_DIR     := tests
+TEST_BIN_DIR := $(BIN_DIR)/tests
 
-#---- Auto collect sources, objects and dependencies -------------------------
-OBJS    := $(addprefix $(BUILD_DIR)/,$(SRCS:.cpp=.o))
-DEPS    := $(addprefix $(BUILD_DIR)/,$(SRCS:.cpp=.d))
+#---- Source discovery --------------------------------------------------------
+SRCS := $(foreach d,$(SRC_DIRS),$(wildcard $(d)/*.cpp))
+OBJS := $(SRCS:%.cpp=$(BUILD_DIR)/%.o)
+DEPS := $(OBJS:.o=.d)
 
-#---- Library sources (exclude main.cpp) for linking into tests --------------
+# Library objects for tests (exclude main.cpp)
 LIB_SRCS := $(filter-out src/main.cpp,$(SRCS))
-LIB_OBJS := $(addprefix $(BUILD_DIR)/,$(LIB_SRCS:.cpp=.o))
+LIB_OBJS := $(LIB_SRCS:%.cpp=$(BUILD_DIR)/%.o)
 
-#---- Test files and targets (auto-detected and managed separately) ----------
-# Extract all *.cpp file names in tests/ (without path or suffix)
+# Test executables
 TEST_NAMES := $(basename $(notdir $(wildcard $(TEST_DIR)/*.cpp)))
-# Compose full source paths and binary output paths
-TEST_SRCS  := $(addprefix $(TEST_DIR)/, $(addsuffix .cpp, $(TEST_NAMES)))
-TEST_BINS  := $(addprefix $(TEST_BIN_DIR)/, $(TEST_NAMES))
+TEST_BINS  := $(addprefix $(TEST_BIN_DIR)/,$(TEST_NAMES))
 
 #---- Targets -----------------------------------------------------------------
 .PHONY: all clean test
 
 all: $(BIN_DIR)/gomoku
 
-# Link final executable
 $(BIN_DIR)/gomoku: $(OBJS)
 	@mkdir -p $(BIN_DIR)
 	$(CXX) $(CXXFLAGS) $^ -o $@
 
-# Compile .cpp → .o and generate .d
 $(BUILD_DIR)/%.o: %.cpp
 	@mkdir -p $(dir $@)
 	$(CXX) $(CXXFLAGS) -MMD -MP -c $< -o $@
 
 -include $(DEPS)
 
-#---- Build each test executable ----------------------------------------------
-# tests/foo.cpp -> bin/tests/foo
 $(TEST_BIN_DIR)/%: $(TEST_DIR)/%.cpp $(LIB_OBJS)
 	@mkdir -p $(TEST_BIN_DIR)
 	$(CXX) $(CXXFLAGS) $^ -o $@
 
-# Run all tests
 test: $(TEST_BINS)
 	@for t in $^; do \
 	echo "Running $$t"; \
 	$$t; \
 	done
 
-# Remove all build artifacts
 clean:
 	rm -rf $(BUILD_DIR) $(BIN_DIR)
