@@ -5,19 +5,19 @@
 
 #include "Board.hpp"
 #include "Player.hpp"
-#include "Renderer.hpp"
-#include "Terminal.hpp"
+#include "IGameUI.hpp"
+#include "IInput.hpp"
 
 class GameLogic {
     Board &board_;
     std::vector<Player *> &players_;
-    Renderer &ui_;
-    Terminal &input_;
+    IGameUI &ui_;
+    IInput &input_;
     int8_t current_;
 
 public:
-    GameLogic(Board &b, std::vector<Player *> &players, Renderer &ui,
-              Terminal &input);
+    GameLogic(Board &b, std::vector<Player *> &players, IGameUI &ui,
+              IInput &input);
     int8_t run();
 };
 

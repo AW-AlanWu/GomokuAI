@@ -8,6 +8,8 @@
 #include "HumanPlayer.hpp"
 #include "Renderer.hpp"
 #include "Terminal.hpp"
+#include "TerminalUI.hpp"
+#include "TerminalInput.hpp"
 
 int main(int argc, char *argv[]) {
     bool p1_ai = false, p2_ai = false;
@@ -19,6 +21,8 @@ int main(int argc, char *argv[]) {
     Terminal term;
     Board board;
     Renderer renderer(term, board);
+    TerminalUI ui(renderer, term);
+    TerminalInput input(term, renderer, board);
 
     Player *p1;
     if (p1_ai)
@@ -35,7 +39,7 @@ int main(int argc, char *argv[]) {
     std::vector<Player *> players{p1, p2};
 
     try {
-        GameLogic logic(board, players, renderer, term);
+        GameLogic logic(board, players, ui, input);
         logic.run();
     } catch (const std::exception &e) {
         std::cerr << "Exception: " << e.what() << "\n";

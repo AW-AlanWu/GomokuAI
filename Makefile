@@ -5,7 +5,7 @@ CXXFLAGS := -std=c++20 \
             -Wshadow -Wconversion \
             -O2
 
-INC_DIRS := core/include ui/include players/include include
+INC_DIRS := core/include ui/include ui/src players/include include
 CXXFLAGS += $(foreach dir,$(INC_DIRS), -I$(dir))
 
 #---- Directory Definitions ---------------------------------------------------
