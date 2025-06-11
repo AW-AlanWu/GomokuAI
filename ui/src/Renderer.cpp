@@ -12,18 +12,19 @@ void Renderer::draw() {
     out += "\x1b[2J";  // clear screen
     out += "=================  Gomoku (五子棋) =================\n\n";
     out += "     ";
-    for (int c = 1; c <= Board::N; ++c) {
+    for (size_t c = 1; c <= Board::N; ++c) {
         out += std::to_string(c);
         if (c < 10) out += ' ';
         out += ' ';
     }
     out += "\n";
-    for (int r = 0; r < Board::N; ++r) {
+    for (size_t r = 0; r < Board::N; ++r) {
         if (r + 1 < 10) out += ' ';
         out += std::to_string(r + 1);
         out += " | ";
-        for (int c = 0; c < Board::N; ++c) {
-            bool highlight = (r == cur_row_ && c == cur_col_);
+        for (size_t c = 0; c < Board::N; ++c) {
+            bool highlight = (r == static_cast<size_t>(cur_row_) &&
+                              c == static_cast<size_t>(cur_col_));
             if (highlight) out += "\x1b[7m";
             int cell = board_.at(r, c);
             if (cell == 0)

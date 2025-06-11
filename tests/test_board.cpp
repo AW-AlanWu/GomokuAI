@@ -40,8 +40,8 @@ static void noWin() {
 
 static void fullBoard() {
     Board b;
-    for (int r = 0; r < Board::N; ++r)
-        for (int c = 0; c < Board::N; ++c) b.placeStone(r, c, 1);
+    for (size_t r = 0; r < Board::N; ++r)
+        for (size_t c = 0; c < Board::N; ++c) b.placeStone(r, c, 1);
     assert(b.isFull());
 }
 
@@ -49,8 +49,8 @@ static void overwriteCell() {
     Board b;
     b.placeStone(0, 0, 1);
     b.placeStone(0, 0, -1);
-    for (int r = 0; r < Board::N; ++r)
-        for (int c = 0; c < Board::N; ++c)
+    for (size_t r = 0; r < Board::N; ++r)
+        for (size_t c = 0; c < Board::N; ++c)
             if (!(r == 0 && c == 0)) b.placeStone(r, c, 1);
     assert(b.isFull());
 }

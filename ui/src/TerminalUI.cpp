@@ -10,20 +10,21 @@ void TerminalUI::drawBoard(const Board &board) {
     buffer += "\x1b[2J";  // clear screen
     buffer += "=================  Gomoku (五子棋) =================\n\n";
     buffer += "     ";
-    for (int c = 1; c <= static_cast<int>(Board::N); ++c) {
+    for (size_t c = 1; c <= Board::N; ++c) {
         buffer += std::to_string(c);
-        if (c < 10) buffer += ' ';
+        if (c < 10u) buffer += ' ';
         buffer += ' ';
     }
     buffer += '\n';
 
     auto [curRow, curCol] = renderer_.cursor();
-    for (int r = 0; r < static_cast<int>(Board::N); ++r) {
-        if (r + 1 < 10) buffer += ' ';
+    for (size_t r = 0; r < Board::N; ++r) {
+        if (r + 1 < 10u) buffer += ' ';
         buffer += std::to_string(r + 1);
         buffer += " | ";
-        for (int c = 0; c < static_cast<int>(Board::N); ++c) {
-            bool highlight = (r == curRow && c == curCol);
+        for (size_t c = 0; c < Board::N; ++c) {
+            bool highlight = (r == static_cast<size_t>(curRow) &&
+                              c == static_cast<size_t>(curCol));
             if (highlight) buffer += "\x1b[7m";
             int cell = board.at(r, c);
             if (cell == 0)
@@ -39,7 +40,7 @@ void TerminalUI::drawBoard(const Board &board) {
     }
     buffer += "\nUse Arrow keys, Enter to place, Q to quit.\n";
 
-    ::write(STDOUT_FILENO, buffer.data(), buffer.size());
+    term_.writeBuffer(buffer);
 }
 
 void TerminalUI::showResult(int8_t winner) {
