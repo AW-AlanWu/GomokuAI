@@ -23,6 +23,8 @@ public:
 private:
     Grid grid_;
     size_t placedCount_;
+    size_t lastRow_;
+    size_t lastCol_;
 
     bool inBounds(size_t r, size_t c) const;
     bool checkWinAt(size_t r, size_t c) const;
