@@ -1,13 +1,13 @@
 #---- Compiler settings -------------------------------------------------------
-CXX := g++
+# Allow overriding the compiler from the environment
+CXX ?= g++
 
-CXXFLAGS := -Wall -Wextra -Wpedantic \
-            -Wshadow -Wconversion \
-                -std=c++20 -O3 -flto -pthread
+WARNINGS   := -Wall -Wextra -Wpedantic -Wshadow -Wconversion
+CXXFLAGS   := $(WARNINGS) -std=c++20 -O3 -flto -pthread
 
 INC_DIRS := core/include ui/include players/include \
             players/strategies/include include
-CXXFLAGS += $(INC_DIRS:%=-I%)
+CPPFLAGS  := $(INC_DIRS:%=-I%)
 
 #---- Directory layout --------------------------------------------------------
 SRC_DIRS := core/src ui/src players/src players/strategies/src src
@@ -37,17 +37,17 @@ all: $(BIN_DIR)/gomoku
 
 $(BIN_DIR)/gomoku: $(OBJS)
 	@mkdir -p $(BIN_DIR)
-	$(CXX) $(CXXFLAGS) $^ -o $@
+	$(CXX) $(CXXFLAGS) $(CPPFLAGS) $^ -o $@
 
 $(BUILD_DIR)/%.o: %.cpp
 	@mkdir -p $(dir $@)
-	$(CXX) $(CXXFLAGS) -MMD -MP -c $< -o $@
+	$(CXX) $(CXXFLAGS) $(CPPFLAGS) -MMD -MP -c $< -o $@
 
 -include $(DEPS)
 
 $(TEST_BIN_DIR)/%: $(TEST_DIR)/%.cpp $(LIB_OBJS)
 	@mkdir -p $(TEST_BIN_DIR)
-	$(CXX) $(CXXFLAGS) $^ -o $@
+	$(CXX) $(CXXFLAGS) $(CPPFLAGS) $^ -o $@
 
 test: $(TEST_BINS)
 	@for t in $^; do \

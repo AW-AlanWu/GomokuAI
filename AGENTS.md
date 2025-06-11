@@ -42,7 +42,7 @@ these tests before committing.
 
 ## Code Style
 
-* 4‑space indentation, no tabs.
+* 4‑space indentation for C++ code; Makefile recipes use tabs.
 * `#pragma once` in headers.
 * Opening braces on the same line.
 * PascalCase for types, camelCase for functions and variables.

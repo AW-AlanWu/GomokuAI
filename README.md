@@ -65,6 +65,8 @@ make        # 產生執行檔 bin/gomoku
 make clean  # 移除產生的檔案
 ```
 
+Makefile 會自動搜尋各模組下的 `.cpp` 檔案並產生對應目標。
+
 若需給 clangd 等工具使用 `compile_commands.json`，可執行（需先安裝 `bear`）：
 
 ```bash
